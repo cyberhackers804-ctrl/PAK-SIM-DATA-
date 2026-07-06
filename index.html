@@ -251,6 +251,20 @@
             border-color: #00f5ff;
         }
 
+        .join-btn {
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+
+        .join-btn::before {
+            background: #00ff88;
+        }
+
+        .join-btn:hover {
+            color: #0a0e27;
+            border-color: #00f5ff;
+        }
+
         .result-box {
             margin-top: 40px;
             padding: 20px;
@@ -451,7 +465,7 @@
             <input 
                 type="text" 
                 id="searchInput" 
-                placeholder="[PHONE: 03001234567 | CNIC: 1234512345671]"
+                placeholder="[PHONE: 0300000000 | CNIC: 1234567892]"
                 autocomplete="off"
             >
             <div class="input-hint">
@@ -462,6 +476,7 @@
         <div class="button-group">
             <button onclick="search()">[ EXECUTE QUERY ]</button>
             <button class="clear-btn" onclick="clearResults()">[ CLEAR CACHE ]</button>
+            <button class="join-btn" onclick="window.open('https://t.me/+htwXPxefBC1kZjNk', '_blank', 'noopener,noreferrer')">[GET MOBILE HACK]</button>
         </div>
 
         <div class="loader" id="loader">>> SCANNING DATABASE... ■■■■■□□□□□</div>
