@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER HACKERS - Hacker Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: -2px 0 #ff006e, 2px 0 #00f5ff; }
+            20% { text-shadow: 2px 0 #ff006e, -2px 0 #00f5ff; }
+            40% { text-shadow: -2px 0 #00f5ff, 2px 0 #ff006e; }
+            60% { text-shadow: 2px 0 #00f5ff, -2px 0 #ff006e; }
+            80% { text-shadow: -2px 0 #ff006e, 2px 0 #00f5ff; }
+            100% { text-shadow: 2px 0 #ff006e, -2px 0 #00f5ff; }
+        }
+
+        @keyframes scanlines {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100px; }
+        }
+
+        @keyframes matrix {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: #0a0e27;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 245, 255, 0.03) 0px,
+                    rgba(0, 245, 255, 0.03) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            color: #00f5ff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid #00f5ff;
+            box-shadow: 
+                0 0 20px rgba(0, 245, 255, 0.3),
+                inset 0 0 20px rgba(0, 245, 255, 0.05),
+                0 0 40px rgba(255, 0, 110, 0.1);
+            padding: 40px;
+            position: relative;
+            z-index: 2;
+            animation: matrix 0.6s ease-out;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            pointer-events: none;
+        }
+
+        .corner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ff006e;
+        }
+
+        .corner.top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .corner.top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+        .corner.bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+        .corner.bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #00f5ff;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8em;
+            color: #00f5ff;
+            font-weight: 900;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            animation: glitch 0.3s infinite;
+        }
+
+        .header p {
+            color: #ff006e;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75em;
+            color: #00f5ff;
+            margin: 15px 0;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            padding: 8px 12px;
+            background: rgba(0, 245, 255, 0.02);
+        }
+
+        .search-box {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            color: #00f5ff;
+            font-weight: 700;
+            font-size: 0.95em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #00f5ff;
+            background: rgba(0, 245, 255, 0.05);
+            color: #00f5ff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 10px rgba(0, 245, 255, 0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(0, 245, 255, 0.5);
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #ff006e;
+            background: rgba(0, 245, 255, 0.1);
+            box-shadow: 
+                inset 0 0 10px rgba(0, 245, 255, 0.2),
+                0 0 20px rgba(0, 245, 255, 0.3),
+                0 0 30px rgba(255, 0, 110, 0.2);
+        }
+
+        .input-hint {
+            font-size: 0.8em;
+            color: #ff006e;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            color: #00f5ff;
+            border: 2px solid #00f5ff;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #00f5ff;
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        button:hover {
+            color: #0a0e27;
+            border-color: #ff006e;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.5), inset 0 0 20px rgba(0, 245, 255, 0.2);
+        }
+
+        button:hover::before {
+            left: 0;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .clear-btn {
+            border-color: #ff006e;
+            color: #ff006e;
+        }
+
+        .clear-btn::before {
+            background: #ff006e;
+        }
+
+        .clear-btn:hover {
+            color: #0a0e27;
+            border-color: #00f5ff;
+        }
+
+        .result-box {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0, 245, 255, 0.03);
+            border: 2px solid #00f5ff;
+            display: none;
+            box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+        }
+
+        .result-box.show {
+            display: block;
+            animation: slideInDown 0.4s ease;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            font-size: 1.1em;
+            color: #ff006e;
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.3);
+        }
+
+        .result-content {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-left: 3px solid #00f5ff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: #00f5ff;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-content pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .error {
+            color: #ff006e;
+            background: rgba(255, 0, 110, 0.1);
+            padding: 15px;
+            border-left: 3px solid #ff006e;
+            border: 2px solid #ff006e;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.2);
+        }
+
+        .success {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 15px;
+            border: 2px solid #00ff88;
+            border-left: 3px solid #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #00f5ff;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .loader.show {
+            display: block;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .examples {
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 2px solid #ff006e;
+        }
+
+        .examples h3 {
+            color: #ff006e;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .example-item {
+            background: rgba(0, 245, 255, 0.05);
+            padding: 10px 12px;
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            color: #00f5ff;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'JetBrains Mono', monospace;
+            border-left: 3px solid #ff006e;
+        }
+
+        .example-item:hover {
+            background: rgba(0, 245, 255, 0.15);
+            border-color: #00f5ff;
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 245, 255, 0.2);
+            color: rgba(0, 245, 255, 0.6);
+            font-size: 0.8em;
+            letter-spacing: 1px;
+        }
+
+        /* Scrollbar styling */
+        .result-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .result-content::-webkit-scrollbar-track {
+            background: rgba(0, 245, 255, 0.1);
+        }
+
+        .result-content::-webkit-scrollbar-thumb {
+            background: #00f5ff;
+            border-radius: 4px;
+        }
+
+        .result-content::-webkit-scrollbar-thumb:hover {
+            background: #ff006e;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="corner top-left"></div>
+        <div class="corner top-right"></div>
+        <div class="corner bottom-left"></div>
+        <div class="corner bottom-right"></div>
+
+        <div class="header">
+            <h1>▓▒░ CYBER HACKERS ░▒▓</h1>
+            <p>> NEURAL DATABASE ACCESS PROTOCOL v2.1</p>
+        </div>
+
+        <div class="status-bar">
+            <span>status: ONLINE</span>
+            <span>connection: ENCRYPTED</span>
+            <span>access: GRANTED</span>
+        </div>
+
+        <div class="search-box">
+            <label for="searchInput">> ENTER QUERY:</label>
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="[PHONE: 03001234567 | CNIC: 1234512345671]"
+                autocomplete="off"
+            >
+            <div class="input-hint">
+                $ SUPPORTED FORMATS: [+923XX-XXXXXXX] | [CNIC-FORMAT: XXXXX-XXXXXXX-X]
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button onclick="search()">[ EXECUTE QUERY ]</button>
+            <button class="clear-btn" onclick="clearResults()">[ CLEAR CACHE ]</button>
+        </div>
+
+        <div class="loader" id="loader">>> SCANNING DATABASE... ■■■■■□□□□□</div>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-title">▼ QUERY RESPONSE ▼</div>
+            <div class="result-content" id="resultContent"></div>
+        </div>
+
+        <div class="examples">
+            <h3">▶ QUICK ACCESS QUERIES:</h3>
+            <div class="example-grid">
+                <div class="example-item" onclick="searchExample('3001234567')">
+                    [📡] 3001234567
+                </div>
+                <div class="example-item" onclick="searchExample('03001234567')">
+                    [📡] 03001234567
+                </div>
+                <div class="example-item" onclick="searchExample('1234512345671')">
+                    [🆔] 1234512345671
+                </div>
+                <div class="example-item" onclick="searchExample('12345-1234567-1')">
+                    [🆔] 12345-1234567-1
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p">⚔ CYBER HACKERS NETWORK ⚔ | HACKER TERMINAL v3.0 | SYSTEM: ACTIVE | ALL SYSTEMS GO</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://famofc.site/api/database.php';
+
+        function search() {
+            const query = document.getElementById('searchInput').value.trim();
+            
+            if (!query) {
+                showResult('⚠ ERROR: Search parameter required', 'error');
+                return;
+            }
+
+            searchExample(query);
+        }
+
+        function searchExample(query) {
+            document.getElementById('searchInput').value = query;
+            performSearch(query);
+        }
+
+        function performSearch(query) {
+            const loader = document.getElementById('loader');
+            const resultBox = document.getElementById('resultBox');
+            const resultContent = document.getElementById('resultContent');
+
+            loader.classList.add('show');
+            resultBox.classList.remove('show');
+
+            fetch(`${API_URL}?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    loader.classList.remove('show');
+                    displayResult(data);
+                })
+                .catch(error => {
+                    loader.classList.remove('show');
+                    showResult(`⚠ SYSTEM ERROR: ${error.message}`, 'error');
+                });
+        }
+
+        function displayResult(data) {
+            const resultBox = document.getElementById('resultBox');
+            const resultContent = document.getElementById('resultContent');
+
+            let html = '';
+
+            if (data.success === false && data.error) {
+                html = `<div class="error">⚠ ACCESS DENIED: ${data.error}</div>`;
+                if (data.usage) {
+                    html += `<div style="margin-top: 10px; padding: 10px; background: rgba(0, 245, 255, 0.05); border-left: 3px solid #00f5ff; color: #00f5ff;">$ USAGE: ${data.usage}</div>`;
+                }
+            } else if (data.success === true && data.data) {
+                html = `<div class="success">✓ ACCESS GRANTED - RECORD FOUND</div>`;
+                html += `<pre>${JSON.stringify(data.data, null, 2)}</pre>`;
+            } else {
+                html = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+
+            resultContent.innerHTML = html;
+            resultBox.classList.add('show');
+        }
+
+        function showResult(message, type) {
+            const resultBox = document.getElementById('resultBox');
+            const resultContent = document.getElementById('resultContent');
+            
+            const className = type === 'error' ? 'error' : 'success';
+            resultContent.innerHTML = `<div class="${className}">${message}</div>`;
+            resultBox.classList.add('show');
+        }
+
+        function clearResults() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('resultBox').classList.remove('show');
+            document.getElementById('loader').classList.remove('show');
+            document.getElementById('searchInput').focus();
+        }
+
+        // Allow Enter key to search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                search();
+            }
+        });
+
+        // Focus on load
+        window.addEventListener('load', function() {
+            document.getElementById('searchInput').focus();
+        });
+    </script>
+</body>
+</html>
